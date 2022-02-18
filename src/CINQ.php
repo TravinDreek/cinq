@@ -38,7 +38,7 @@ $account_info = json_decode(get_endpoint('get_login_info')) or exit('无法获�
 echo '已登录账号 '.$account_info->data->nickname.' ('.$account_info->data->user_id.').'.PHP_EOL;
 
 $listener = parallel\run($listener, [$args['l']]);
-echo(chr(7));
+
 while(true) {
 	switch(select_from_list('CINQ', ['消息', '好友', '群组', '退出'])) {
 		case 1:

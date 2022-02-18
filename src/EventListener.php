@@ -34,14 +34,17 @@ $listener = function($localhost) {
 		if($content->post_type == 'cinq') {
 			switch($content->request) {
 				case 'enable_message_echo':
-					foreach($stack as $message) {
-						if($message->message_type == $content->type && $content->id == (($content->type == 'private') ? $message->user_id : $message->group_id))
-						echo date('[y-m-d h-i-s] ', time()).(
-							$message->message_type == 'group' ? (
-								$message->sender->card && $message->sender->card != $message->sender->nickname ?
-								$message->sender->card.' ('.$message->sender->nickname.', '.$message->user_id.'): '.$message->message :
-								$message->sender->nickname.' ('.$message->user_id.'): '.$message->message
-							) :
+					if($content->type == 'group') foreach($stack as $message) if($message->message_type == 'group') {
+						if($message->group_id == $content->id)
+						echo date('[y-m-d h:i:s] ', time()).(
+							$message->sender->card && $message->sender->card != $message->sender->nickname
+							? $message->sender->card.' ('.$message->sender->nickname.', '.$message->user_id.'): '.$message->message
+							: $message->sender->nickname.' ('.$message->user_id.'): '.$message->message
+						).PHP_EOL;
+					}
+					if($content->type == 'private') foreach($stack as $message) if($message->message_type == 'private') {
+						if($message->user_id == $content->id || $message->user_id == $content->my_id)
+						echo date('[y-m-d h:i:s] ', time()).(
 							$message->sender->nickname.' ('.$message->user_id.'): '.$message->message
 						).PHP_EOL;
 					}
@@ -69,7 +72,7 @@ $listener = function($localhost) {
 					&& $message_echo['type'] == $content->message_type
 					&& ($content->user_id == $message_echo['id'] || $content->group_id == $message_echo['id'])
 				)
-				echo date('[y-m-d h-i-s] ', time()).(
+				echo date('[y-m-d h:i:s] ', time()).(
 					$content->message_type == 'group' ? (
 						$content->sender->card && $content->sender->card != $content->sender->nickname ?
 						$content->sender->card.' ('.$content->sender->nickname.', '.$content->user_id.'): '.$content->message :

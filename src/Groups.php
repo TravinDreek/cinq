@@ -76,10 +76,10 @@ function display_group_profile($group) {
 				get_cinq_endpoint(['request' => 'archive_message', 'message' => [
 					'post_type' => 'message',
 					'message_type' => 'group',
+					'user_id' => $GLOBALS['account_info']->data->user_id,
 					'group_id' => $group->group_id,
 					'message' => $msg,
 					'sender' => [
-						'user_id' => $GLOBALS['account_info']->data->user_id,
 						'card' => '',
 						'nickname' => $GLOBALS['account_info']->data->nickname
 					]

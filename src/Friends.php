@@ -79,7 +79,10 @@ function display_friend_profile($friend) {
 					'post_type' => 'message',
 					'message_type' => 'private',
 					'user_id' => $GLOBALS['account_info']->data->user_id,
-					'message' => $msg
+					'message' => $msg,
+					'sender' => [
+						'nickname' => $GLOBALS['account_info']->data->nickname
+					]
 				]]);
 				break;
 			case 3:
@@ -95,7 +98,7 @@ function display_friend_chat($friend) {
 		'欲发送消息或返回, 请按下回车键.'.PHP_EOL.
 		'===================='.PHP_EOL
 	);
-	get_cinq_endpoint(['request' => 'enable_message_echo', 'type' => 'private', 'id' => $friend->user_id]);
+	get_cinq_endpoint(['request' => 'enable_message_echo', 'type' => 'private', 'id' => $friend->user_id, 'my_id' => $GLOBALS['account_info']->data->user_id]);
 	fgets(STDIN);
 	get_cinq_endpoint(['request' => 'disable_message_echo']);
 }
